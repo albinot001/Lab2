@@ -12,52 +12,34 @@
 <body style="margin: 0px; overflow: hidden">
   <a-scene embedded arjs>
     <a-marker preset="hiro">
-      <a-circle id="blueObjects" position="0 1 0" color="blue" radius="0.5"></a-circle>
-      <a-sphere id="blueObjects" position="-1 0.5 0" color="blue" radius="0.5"></a-sphere>
-      <a-cube id="blueObjects" position="1 0.5 0" color="blue" scale="0.5 0.5 0.5"></a-cube>
-      <a-sphere id="redObjects" position="0 0.5 0" color="red"></a-sphere>
-      <a-box id="redObjects" position="1 0.5 0" color="red"></a-box>
-      <a-cylinder id="redObjects" position="-1 0.5 0" color="red"></a-cylinder>
+      <!-- Marker-based blue objects -->
+      <a-circle position="0 1 0" color="blue" radius="0.5"></a-circle>
+      <a-sphere position="-1 0.5 0" color="blue" radius="0.5"></a-sphere>
+      <a-cube position="1 0.5 0" color="blue" scale="0.5 0.5 0.5"></a-cube>
+
+      <!-- Location-based red objects -->
+      <a-sphere id="redSphere" color="red" visible="false"></a-sphere>
+      <a-box id="redBox" color="red" visible="false"></a-box>
+      <a-cylinder id="redCylinder" color="red" visible="false"></a-cylinder>
     </a-marker>
     <a-marker-camera preset="hiro"></a-marker-camera>
   </a-scene>
   <script>
-    var blueObjects = document.querySelectorAll("#blueObjects");
-    var redObjects = document.querySelectorAll("#redObjects");
+    var redSphere = document.getElementById("redSphere");
+    var redBox = document.getElementById("redBox");
+    var redCylinder = document.getElementById("redCylinder");
 
     navigator.geolocation.getCurrentPosition(function (position) {
-      var marker = document.querySelector("[preset='hiro']");
-      var markerPosition = new THREE.Vector3();
-      marker.object3D.getWorldPosition(markerPosition);
+      // Set location-based red objects positions
+      redSphere.setAttribute("position", `${position.coords.longitude} 0.5 ${position.coords.latitude}`);
+      redBox.setAttribute("position", `${position.coords.longitude + 0.01} 0.5 ${position.coords.latitude}`);
+      redCylinder.setAttribute("position", `${position.coords.longitude - 0.01} 0.5 ${position.coords.latitude}`);
 
-      var distance = markerPosition.distanceTo(
-        new THREE.Vector3(
-          position.coords.longitude,
-          0.5, // assuming a height of 0.5 for simplicity
-          position.coords.latitude
-        )
-      );
-
-      if (distance < 2) { // You can adjust this threshold value
-        showObjects(blueObjects);
-        hideObjects(redObjects);
-      } else {
-        showObjects(redObjects);
-        hideObjects(blueObjects);
-      }
+      // Make location-based red objects visible
+      redSphere.setAttribute("visible", true);
+      redBox.setAttribute("visible", true);
+      redCylinder.setAttribute("visible", true);
     });
-
-    function showObjects(objects) {
-      objects.forEach(function (obj) {
-        obj.setAttribute("visible", true);
-      });
-    }
-
-    function hideObjects(objects) {
-      objects.forEach(function (obj) {
-        obj.setAttribute("visible", false);
-      });
-    }
   </script>
 </body>
 </html>
