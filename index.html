@@ -18,5 +18,15 @@
       </a-marker>
       <a-marker-camera preset="hiro"></a-marker-camera>
     </a-scene>
+    <script>
+      navigator.geolocation.getCurrentPosition(function (position) {
+        var redLocationObjects = document.getElementById('redLocationObjects');
+        redLocationObjects.innerHTML = `
+          <a-sphere position="${position.coords.longitude} 0.5 ${position.coords.latitude}" material="color: red;"></a-sphere>
+          <a-box position="${position.coords.longitude + 1} 0.5 ${position.coords.latitude}" material="color: red;"></a-box>
+          <a-cylinder position="${position.coords.longitude - 1} 0.5 ${position.coords.latitude}" material="color: red;"></a-cylinder>
+        `;
+      });
+    </script>
   </body>
 </html>
