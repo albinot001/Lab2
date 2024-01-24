@@ -1,69 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-  <!-- include ar.js for A-Frame -->
-  <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/2.3.1/aframe/build/aframe-ar.js"></script>
-  <title>Lab2</title>
-</head>
-<body style="margin: 0px; overflow: hidden">
-  <a-scene embedded arjs>
-    <a-marker preset="hiro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <!-- include ar.js for A-Frame -->
+    <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/2.3.1/aframe/build/aframe-ar.js"></script>
+    <title>AR Lab</title>
+  </head>
+  <body style="margin: 0px; overflow: hidden">
+    <a-scene embedded arjs>
       <!-- Marker-based blue objects -->
-      <a-circle position="0 1 0" color="blue" radius="0.5"></a-circle>
-      <a-sphere position="-1 0.5 0" color="blue" radius="0.5"></a-sphere>
-      <a-cube position="1 0.5 0" color="blue" scale="0.5 0.5 0.5"></a-cube>
+      <a-marker preset="hiro">
+        <a-sphere position="0 1 0" color="blue" radius="0.5"></a-sphere>
+        <a-box
+          position="-1 0.5 0"
+          color="blue"
+          width="0.5"
+          height="0.5"
+          depth="0.5"
+        ></a-box>
+        <a-cylinder
+          position="1 0.5 0"
+          color="blue"
+          radius="0.25"
+          height="0.5"
+        ></a-cylinder>
+      </a-marker>
 
       <!-- Location-based red objects -->
-      <a-sphere id="redSphere" color="red" visible="false"></a-sphere>
-      <a-box id="redBox" color="red" visible="false"></a-box>
-      <a-cylinder id="redCylinder" color="red" visible="false"></a-cylinder>
-    </a-marker>
-    <a-marker-camera preset="hiro" camera-matrix-listener>
-      <!-- Camera matrix listener to update visibility based on distance -->
-      <a-entity id="cameraDistanceListener" distance-listener></a-entity>
-    </a-marker-camera>
-  </a-scene>
-  <script>
-    // Custom component to calculate and update distance between camera and marker
-    AFRAME.registerComponent('distance-listener', {
-      init: function () {
-        this.marker = document.querySelector('a-marker');
-        this.camera = document.querySelector('a-marker-camera');
-        this.redObjects = document.querySelectorAll('#redSphere, #redBox, #redCylinder');
-        this.updateDistance();
-      },
-      updateDistance: function () {
-        var markerPosition = new THREE.Vector3();
-        var cameraPosition = new THREE.Vector3();
-        this.marker.object3D.getWorldPosition(markerPosition);
-        this.camera.object3D.getWorldPosition(cameraPosition);
-        
-        var distance = markerPosition.distanceTo(cameraPosition);
+      <a-entity gps-entity-place="latitude: 42.206120; longitude: 21.664141;">
+        <a-sphere position="0 1 0" color="red" radius="0.5"></a-sphere>
+        <a-box
+          position="-1 0.5 0"
+          color="red"
+          width="0.5"
+          height="0.5"
+          depth="0.5"
+        ></a-box>
+        <a-cylinder
+          position="1 0.5 0"
+          color="red"
+          radius="0.25"
+          height="0.5"
+        ></a-cylinder>
+      </a-entity>
 
-        // Adjust this threshold value based on your preference
-        var visibilityThreshold = 2; // Units in meters
-
-        // Update visibility based on distance
-        if (distance < visibilityThreshold) {
-          this.redObjects.forEach(function (obj) {
-            obj.setAttribute('visible', false);
-          });
-        } else {
-          this.redObjects.forEach(function (obj) {
-            obj.setAttribute('visible', true);
-          });
-        }
-
-        // Call the updateDistance function on every frame
-        this.el.sceneEl.renderer.setAnimationLoop(() => {
-          this.updateDistance();
-        });
-      }
-    });
-  </script>
-</body>
+      <!-- Marker-based camera -->
+      <a-marker-camera preset="hiro"></a-marker-camera>
+    </a-scene>
+  </body>
 </html>
