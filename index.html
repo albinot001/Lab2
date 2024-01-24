@@ -18,21 +18,21 @@
       </a-marker>
       <a-marker-camera preset="hiro"></a-marker-camera>
     </a-scene>
-    <script>
+    <!-- <script>
       navigator.geolocation.getCurrentPosition(function (position) {
         var redLocationObjects = document.querySelector("[preset='hiro']");
         redLocationObjects.innerHTML = `
-            <a-sphere position="${position.coords.longitude} 0.5 ${
+          <a-sphere position="${position.coords.longitude} 0.5 ${
           position.coords.latitude
         }" color="red"></a-sphere>
-            <a-box position="${position.coords.longitude + 0.01} 0.5 ${
+          <a-box position="${position.coords.longitude + 1} 0.5 ${
           position.coords.latitude
         }" color="red"></a-box>
-            <a-cylinder position="${position.coords.longitude - 0.01} 0.5 ${
+          <a-cylinder position="${position.coords.longitude - 1} 0.5 ${
           position.coords.latitude
         }" color="red"></a-cylinder>
-          `;
+        `;
       });
-    </script>
+    </script> -->
   </body>
 </html>
