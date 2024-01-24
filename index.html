@@ -1,30 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://aframe.io/releases/0.6.0/aframe.min.js"></script>
-    <!-- include ar.js for A-Frame -->
-    <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
-    <title>Lab2</title>
-  </head>
-  <body style="margin: 0px; overflow: hidden">
-    <a-scene embedded arjs>
-      <a-marker preset="hiro">
-        <a-circle position="0 1 0" color="blue" radius="0.5"></a-circle>
-        <a-sphere position="-1 0.5 0" color="blue" radius="0.5"></a-sphere>
-        <a-cube position="1 0.5 0" color="blue" scale="0.5 0.5 0.5"></a-cube>
-      </a-marker>
-      <a-marker-camera preset="hiro"></a-marker-camera>
-    </a-scene>
-    <script>
-  var redLocationObjects = document.querySelector("[preset='hiro']");
-  redLocationObjects.innerHTML = `
-    <a-sphere position="0 0.5 0" color="red"></a-sphere>
-    <a-box position="1 0.5 0" color="red"></a-box>
-    <a-cylinder position="-1 0.5 0" color="red"></a-cylinder>
-  `;
-</script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <!-- include ar.js for A-Frame -->
+  <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/2.3.1/aframe/build/aframe-ar.js"></script>
+  <title>Lab2</title>
+</head>
+<body style="margin: 0px; overflow: hidden">
+  <a-scene embedded arjs>
+    <a-marker preset="hiro">
+      <a-circle id="blueObjects" position="0 1 0" color="blue" radius="0.5"></a-circle>
+      <a-sphere id="blueObjects" position="-1 0.5 0" color="blue" radius="0.5"></a-sphere>
+      <a-cube id="blueObjects" position="1 0.5 0" color="blue" scale="0.5 0.5 0.5"></a-cube>
+      <a-sphere id="redObjects" position="0 0.5 0" color="red"></a-sphere>
+      <a-box id="redObjects" position="1 0.5 0" color="red"></a-box>
+      <a-cylinder id="redObjects" position="-1 0.5 0" color="red"></a-cylinder>
+    </a-marker>
+    <a-marker-camera preset="hiro"></a-marker-camera>
+  </a-scene>
+  <script>
+    var blueObjects = document.querySelectorAll("#blueObjects");
+    var redObjects = document.querySelectorAll("#redObjects");
+
+    navigator.geolocation.getCurrentPosition(function (position) {
+      var marker = document.querySelector("[preset='hiro']");
+      var markerPosition = new THREE.Vector3();
+      marker.object3D.getWorldPosition(markerPosition);
+
+      var distance = markerPosition.distanceTo(
+        new THREE.Vector3(
+          position.coords.longitude,
+          0.5, // assuming a height of 0.5 for simplicity
+          position.coords.latitude
+        )
+      );
+
+      if (distance < 2) { // You can adjust this threshold value
+        showObjects(blueObjects);
+        hideObjects(redObjects);
+      } else {
+        showObjects(redObjects);
+        hideObjects(blueObjects);
+      }
+    });
+
+    function showObjects(objects) {
+      objects.forEach(function (obj) {
+        obj.setAttribute("visible", true);
+      });
+    }
+
+    function hideObjects(objects) {
+      objects.forEach(function (obj) {
+        obj.setAttribute("visible", false);
+      });
+    }
+  </script>
+</body>
 </html>
