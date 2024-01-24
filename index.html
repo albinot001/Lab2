@@ -11,14 +11,14 @@
   </head>
   <body style="margin: 0px; overflow: hidden">
     <a-scene embedded arjs>
-      <a-marker preset="hiro">
+      <!-- <a-marker preset="hiro">
         <a-circle position="0 1 0" color="blue" radius="0.5"></a-circle>
         <a-sphere position="-1 0.5 0" color="blue" radius="0.5"></a-sphere>
         <a-cube position="1 0.5 0" color="blue" scale="0.5 0.5 0.5"></a-cube>
-      </a-marker>
+      </a-marker> -->
       <a-marker-camera preset="hiro"></a-marker-camera>
     </a-scene>
-    <!-- <script>
+    <script>
       navigator.geolocation.getCurrentPosition(function (position) {
         var redLocationObjects = document.querySelector("[preset='hiro']");
         redLocationObjects.innerHTML = `
@@ -33,6 +33,6 @@
         }" color="red"></a-cylinder>
         `;
       });
-    </script> -->
+    </script>
   </body>
 </html>
