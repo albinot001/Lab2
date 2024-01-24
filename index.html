@@ -30,10 +30,11 @@
     var redCylinder = document.getElementById("redCylinder");
 
     navigator.geolocation.getCurrentPosition(function (position) {
-      // Set location-based red objects positions
+      // Set location-based red objects positions with smaller adjustment
+      var adjustment = 0.00001; // Adjust this value as needed
       redSphere.setAttribute("position", `${position.coords.longitude} 0.5 ${position.coords.latitude}`);
-      redBox.setAttribute("position", `${position.coords.longitude + 0.01} 0.5 ${position.coords.latitude}`);
-      redCylinder.setAttribute("position", `${position.coords.longitude - 0.01} 0.5 ${position.coords.latitude}`);
+      redBox.setAttribute("position", `${position.coords.longitude + adjustment} 0.5 ${position.coords.latitude}`);
+      redCylinder.setAttribute("position", `${position.coords.longitude - adjustment} 0.5 ${position.coords.latitude}`);
 
       // Make location-based red objects visible
       redSphere.setAttribute("visible", true);
