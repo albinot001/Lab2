@@ -26,19 +26,21 @@
         radius="0.5"
       ></a-sphere>
 
-      <a-sphere
-        id="redSphere"
-        position="0 0.5 0"
-        color="red"
-        visible="false"
-      ></a-sphere>
-      <a-box id="redBox" position="0 1 0" color="red" visible="false"></a-box>
-      <a-cylinder
-        id="redCylinder"
-        position="-1 0.5 0"
-        color="red"
-        visible="false"
-      ></a-cylinder>
+      <a-entity gps-entity-place="latitude: 42.202754; longitude: 21.660173;">
+        <a-sphere
+          id="redSphere1"
+          color="red"
+          position="0 0.5 0"
+          visible="false"
+        ></a-sphere>
+        <a-box id="redBox" color="red" position="0 1 0" visible="false"></a-box>
+        <a-cylinder
+          id="redCylinder"
+          color="red"
+          position="0 -0.5 0"
+          visible="false"
+        ></a-cylinder>
+      </a-entity>
 
       <!-- define a camera which will move according to the marker position -->
       <a-marker-camera preset="hiro"></a-marker-camera>
@@ -51,7 +53,7 @@
             "#blueBox, #blueCircle, #blueSphere"
           );
           this.redObjects = document.querySelectorAll(
-            "#redBox, #redSphere, #redCylinder"
+            "#redBox, #redSphere1, #redCylinder"
           );
           this.updateVisibility();
         },
