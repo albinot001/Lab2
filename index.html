@@ -36,33 +36,34 @@
         ></a-cylinder>
       </a-marker>
 
-      <!-- Location-based red objects -->
-      <a-entity gps-entity-place="latitude: 42.20611; longitude: 21.66306;">
-        <a-sphere
-          id="redSphere"
-          color="red"
-          visible="false"
-          radius="0.5"
-        ></a-sphere>
-        <a-box
-          id="redBox"
-          color="red"
-          visible="false"
-          width="0.5"
-          height="0.5"
-          depth="0.5"
-        ></a-box>
-        <a-cylinder
-          id="redCylinder"
-          color="red"
-          visible="false"
-          radius="0.25"
-          height="0.5"
-        ></a-cylinder>
-      </a-entity>
+      <!-- Red objects (initially invisible) -->
+      <a-sphere
+        id="redSphere"
+        color="red"
+        visible="false"
+        radius="0.5"
+      ></a-sphere>
+      <a-box
+        id="redBox"
+        color="red"
+        visible="false"
+        width="0.5"
+        height="0.5"
+        depth="0.5"
+      ></a-box>
+      <a-cylinder
+        id="redCylinder"
+        color="red"
+        visible="false"
+        radius="0.25"
+        height="0.5"
+      ></a-cylinder>
+
+      <!-- Custom component to handle visibility based on camera distance -->
+      <a-entity id="cameraDistanceListener" camera-listener></a-entity>
 
       <!-- Marker-based camera -->
-      <a-marker-camera preset="hiro" camera-listener></a-marker-camera>
+      <a-marker-camera preset="hiro"></a-marker-camera>
     </a-scene>
     <script>
       AFRAME.registerComponent("camera-listener", {
