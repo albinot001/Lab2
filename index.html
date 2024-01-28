@@ -10,75 +10,24 @@
     <title>Document</title>
   </head>
   <body style="margin: 0px; overflow: hidden">
-    <a-box id="blueBox" position='0 0.5 0' color='blue'></a-box>
+    <a-scene embedded arjs>
+      <!-- Marker-based (Blue Objects) -->
+      <a-box id="blueBox" position="0 0.5 0" color="blue"></a-box>
       <a-circle id="blueCircle" position="0 1 0" color="blue" radius="0.5"></a-circle>
       <a-sphere id="blueSphere" position="-1 0.5 0" color="blue" radius="0.5"></a-sphere>
+
+      <!-- Location-based (Red Objects) -->
       
-      <!-- Location-based (Red Objects with kanji marker) -->
-      <a-entity id="redObjects" position="0 0 0" visible="false">
-        <a-sphere id="redSphere1" color="red" position="0 0.5 0"></a-sphere>
-        <a-box id="redBox" color="red" position="0 1 0"></a-box>
-        <a-cylinder id="redCylinder" color="red" position="0 -0.5 0"></a-cylinder>
+
+      <!-- Location-based (Additional Red Objects at GPS coordinates) -->
+      <a-entity gps-entity-place="latitude: 42.202754; longitude: 21.660173;">
+        <a-box position="0 0.5 0" color="red"></a-box>
+        <a-sphere position="0 1.25 0" color="red"></a-sphere>
+        <a-cylinder position="0 -0.75 0" color="red"></a-cylinder>
       </a-entity>
 
-      <!-- Marker Camera with kanji marker -->
-      <a-marker-camera preset='kanji' camera-listener></a-marker-camera>
-
-      <!-- Marker Camera with hiro marker -->
-      <a-marker-camera preset='hiro' camera-listener-hiro></a-marker-camera>
+      <!-- Define a camera which will move according to the marker position -->
+      <a-marker-camera preset="hiro"></a-marker-camera>
     </a-scene>
-    <script>
-      AFRAME.registerComponent('camera-listener', {
-        init: function () {
-          this.marker = document.querySelector('a-marker[preset="kanji"]');
-          this.redObjects = document.querySelector('#redObjects');
-          this.updateVisibility();
-        },
-        updateVisibility: function () {
-          var camera = this.el.object3D;
-          var markerPosition = this.marker.object3D.getWorldPosition(new THREE.Vector3());
-          var cameraPosition = camera.getWorldPosition(new THREE.Vector3());
-          var distance = markerPosition.distanceTo(cameraPosition);
-
-          // Adjust this threshold value based on your preference
-          var visibilityThreshold = 0.3; // Units in meters
-
-          // Update visibility based on distance
-          this.redObjects.setAttribute('visible', distance < visibilityThreshold);
-
-          // Call the updateVisibility function on every frame
-          this.el.sceneEl.renderer.setAnimationLoop(() => {
-            this.updateVisibility();
-          });
-        }
-      });
-
-      AFRAME.registerComponent('camera-listener-hiro', {
-        init: function () {
-          this.marker = document.querySelector('a-marker[preset="hiro"]');
-          this.blueObjects = document.querySelectorAll('#blueBox, #blueCircle, #blueSphere');
-          this.updateVisibility();
-        },
-        updateVisibility: function () {
-          var camera = this.el.object3D;
-          var markerPosition = this.marker.object3D.getWorldPosition(new THREE.Vector3());
-          var cameraPosition = camera.getWorldPosition(new THREE.Vector3());
-          var distance = markerPosition.distanceTo(cameraPosition);
-
-          // Adjust this threshold value based on your preference
-          var visibilityThreshold = 0.5; // Units in meters
-
-          // Update visibility based on distance
-          this.blueObjects.forEach(function (obj) {
-            obj.setAttribute('visible', distance >= visibilityThreshold);
-          });
-
-          // Call the updateVisibility function on every frame
-          this.el.sceneEl.renderer.setAnimationLoop(() => {
-            this.updateVisibility();
-          });
-        }
-      });
-    </script>
   </body>
 </html>
