@@ -11,37 +11,62 @@
   </head>
   <body style="margin: 0px; overflow: hidden">
     <a-scene embedded arjs>
-      <!-- create your content here, a box, a circle, and a sphere for now -->
-      <a-box id="blueBox" position="0 0.5 0" color="blue"></a-box>
-      <a-circle
-        id="blueCircle"
-        position="0 1 0"
-        color="blue"
-        radius="0.5"
-      ></a-circle>
-      <a-sphere
-        id="blueSphere"
-        position="-1 0.5 0"
-        color="blue"
-        radius="0.5"
-      ></a-sphere>
+      <!-- Marker-based blue objects -->
+      <a-marker preset="hiro">
+        <a-sphere
+          id="blueSphere"
+          position="0 1 0"
+          color="blue"
+          radius="0.5"
+        ></a-sphere>
+        <a-box
+          id="blueBox"
+          position="-1 0.5 0"
+          color="blue"
+          width="0.5"
+          height="0.5"
+          depth="0.5"
+        ></a-box>
+        <a-cylinder
+          id="blueCylinder"
+          position="1 0.5 0"
+          color="blue"
+          radius="0.25"
+          height="0.5"
+        ></a-cylinder>
+      </a-marker>
 
-      <a-sphere
-        id="redSphere"
-        position="0 0.5 0"
-        color="red"
-        visible="false"
-      ></a-sphere>
-      <a-box id="redBox" position="0 1 0" color="red" visible="false"></a-box>
-      <a-cylinder
-        id="redCylinder"
-        position="-1 0.5 0"
-        color="red"
-        visible="false"
-      ></a-cylinder>
+      <!-- Location-based red objects -->
+      <a-entity
+        gps-entity-place="latitude: YOUR_LATITUDE; longitude: YOUR_LONGITUDE;"
+      >
+        <a-sphere
+          id="redSphere"
+          color="red"
+          visible="false"
+          radius="0.5"
+        ></a-sphere>
+        <a-box
+          id="redBox"
+          color="red"
+          visible="false"
+          width="0.5"
+          height="0.5"
+          depth="0.5"
+        ></a-box>
+        <a-cylinder
+          id="redCylinder"
+          color="red"
+          visible="false"
+          radius="0.25"
+          height="0.5"
+        ></a-cylinder>
+      </a-entity>
 
+      <!-- Custom component to handle visibility based on camera distance -->
       <a-entity id="cameraDistanceListener" distance-listener></a-entity>
-      <!-- define a camera which will move according to the marker position -->
+
+      <!-- Marker-based camera -->
       <a-marker-camera preset="hiro"></a-marker-camera>
     </a-scene>
     <script>
