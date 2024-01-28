@@ -16,14 +16,13 @@
       <a-circle id="blueCircle" position="0 1 0" color="blue" radius="0.5"></a-circle>
       <a-sphere id="blueSphere" position="-1 0.5 0" color="blue" radius="0.5"></a-sphere>
 
-      <!-- Location-based (Red Objects) -->
-      
+     
 
       <!-- Location-based (Additional Red Objects at GPS coordinates) -->
       <a-entity gps-entity-place="latitude: 42.202754; longitude: 21.660173;">
-        <a-box position="0 0.5 0" color="red"></a-box>
-        <a-sphere position="0 1.25 0" color="red"></a-sphere>
-        <a-cylinder position="0 -0.75 0" color="red"></a-cylinder>
+        <a-sphere id="redSphere" position="-1.5 0.5 0" color="red" radius="0.5" visible="false"></a-sphere>
+        <a-box id="redBox" position="-1.5 1 0" color="red" visible="false"></a-box>
+        <a-cylinder id="redCylinder" position="-2.5 0.5 0" color="red" visible="false"></a-cylinder>
       </a-entity>
 
       <!-- Define a camera which will move according to the marker position -->
