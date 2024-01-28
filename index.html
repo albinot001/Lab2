@@ -11,97 +11,51 @@
   </head>
   <body style="margin: 0px; overflow: hidden">
     <a-scene embedded arjs>
-      <!-- Marker-based blue objects -->
-      <a-marker preset="hiro">
-        <a-sphere
-          id="blueSphere"
-          position="0 1 0"
-          color="blue"
-          radius="0.5"
-        ></a-sphere>
-        <a-box
-          id="blueBox"
-          position="-1 0.5 0"
-          color="blue"
-          width="0.5"
-          height="0.5"
-          depth="0.5"
-        ></a-box>
-        <a-cylinder
-          id="blueCylinder"
-          position="1 0.5 0"
-          color="blue"
-          radius="0.25"
-          height="0.5"
-        ></a-cylinder>
-      </a-marker>
+      <!-- Marker-based (Blue Objects) -->
+      <a-box id="blueBox" position='0 0.5 0' color='blue'></a-box>
+      <a-circle id="blueCircle" position="0 1 0" color="blue" radius="0.5"></a-circle>
+      <a-sphere id="blueSphere" position="-1 0.5 0" color="blue" radius="0.5"></a-sphere>
+      
+      <!-- Location-based (Red Objects) -->
+      <a-sphere id="redSphere" position='0 0.5 0' color="red" visible="false"></a-sphere>
+      <a-box id="redBox" position="0 1 0" color="red" visible="false"></a-box>
+      <a-cylinder id="redCylinder" position="-1 0.5 0" color="red" visible="false"></a-cylinder>
 
-      <!-- Red objects (initially invisible) -->
-      <a-sphere
-        id="redSphere"
-        color="red"
-        visible="false"
-        radius="0.5"
-      ></a-sphere>
-      <a-box
-        id="redBox"
-        color="red"
-        visible="false"
-        width="0.5"
-        height="0.5"
-        depth="0.5"
-      ></a-box>
-      <a-cylinder
-        id="redCylinder"
-        color="red"
-        visible="false"
-        radius="0.25"
-        height="0.5"
-      ></a-cylinder>
-
-      <!-- Custom component to handle visibility based on camera distance -->
-      <a-entity id="cameraDistanceListener" camera-listener></a-entity>
-
-      <!-- Marker-based camera -->
-      <a-marker-camera preset="hiro"></a-marker-camera>
+      <!-- Marker Camera -->
+      <a-marker-camera preset='hiro' camera-listener></a-marker-camera>
     </a-scene>
+
     <script>
-      AFRAME.registerComponent("camera-listener", {
+      AFRAME.registerComponent('camera-listener', {
         init: function () {
-          this.marker = document.querySelector("a-marker");
-          this.blueObjects = document.querySelectorAll(
-            "#blueSphere, #blueBox, #blueCylinder"
-          );
-          this.redObjects = document.querySelectorAll(
-            "#redSphere, #redBox, #redCylinder"
-          );
+          this.marker = document.querySelector('a-marker');
+          this.blueObjects = document.querySelectorAll('#blueBox, #blueCircle, #blueSphere');
+          this.redObjects = document.querySelectorAll('#redBox, #redSphere, #redCylinder');
           this.updateVisibility();
         },
         updateVisibility: function () {
           var camera = this.el.object3D;
-          var markerPosition = this.marker.object3D.getWorldPosition(
-            new THREE.Vector3()
-          );
+          var markerPosition = this.marker.object3D.getWorldPosition(new THREE.Vector3());
           var cameraPosition = camera.getWorldPosition(new THREE.Vector3());
           var distance = markerPosition.distanceTo(cameraPosition);
 
           // Adjust this threshold value based on your preference
-          var visibilityThreshold = 2; // Units in meters
+          var visibilityThreshold = 0.2; // Units in meters
 
           // Update visibility based on distance
           if (distance < visibilityThreshold) {
             this.blueObjects.forEach(function (obj) {
-              obj.setAttribute("visible", true);
+              obj.setAttribute('visible', false);
             });
             this.redObjects.forEach(function (obj) {
-              obj.setAttribute("visible", false);
+              obj.setAttribute('visible', true);
             });
           } else {
             this.blueObjects.forEach(function (obj) {
-              obj.setAttribute("visible", false);
+              obj.setAttribute('visible', true);
             });
             this.redObjects.forEach(function (obj) {
-              obj.setAttribute("visible", true);
+              obj.setAttribute('visible', false);
             });
           }
 
@@ -109,7 +63,7 @@
           this.el.sceneEl.renderer.setAnimationLoop(() => {
             this.updateVisibility();
           });
-        },
+        }
       });
     </script>
   </body>
