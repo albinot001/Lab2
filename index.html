@@ -64,24 +64,16 @@
           var distance = markerPosition.distanceTo(cameraPosition);
 
           // Adjust this threshold value based on your preference
-          var visibilityThreshold = 0.2; // Units in meters
+          var visibilityThreshold = 0.5; // Units in meters
 
           // Update visibility based on distance
-          if (distance < visibilityThreshold) {
-            this.blueObjects.forEach(function (obj) {
-              obj.setAttribute("visible", false);
-            });
-            this.redObjects.forEach(function (obj) {
-              obj.setAttribute("visible", true);
-            });
-          } else {
-            this.blueObjects.forEach(function (obj) {
-              obj.setAttribute("visible", true);
-            });
-            this.redObjects.forEach(function (obj) {
-              obj.setAttribute("visible", false);
-            });
-          }
+          this.blueObjects.forEach(function (obj) {
+            obj.setAttribute("visible", distance >= visibilityThreshold);
+          });
+
+          this.redObjects.forEach(function (obj) {
+            obj.setAttribute("visible", distance < visibilityThreshold);
+          });
 
           // Call the updateVisibility function on every frame
           this.el.sceneEl.renderer.setAnimationLoop(() => {
