@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- ... (your existing head content) ... -->
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <!-- include ar.js for A-Frame -->
     <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/2.3.1/aframe/build/aframe-ar.js"></script>
     <title>AR Lab</title>
   </head>
@@ -13,24 +10,11 @@
     <a-scene embedded arjs>
       <!-- Marker-based blue objects -->
       <a-marker preset="hiro">
-        <a-sphere position="0 1 0" color="blue" radius="0.5"></a-sphere>
-        <a-box
-          position="-1 0.5 0"
-          color="blue"
-          width="0.5"
-          height="0.5"
-          depth="0.5"
-        ></a-box>
-        <a-cylinder
-          position="1 0.5 0"
-          color="blue"
-          radius="0.25"
-          height="0.5"
-        ></a-cylinder>
+        <!-- ... (your existing blue objects) ... -->
       </a-marker>
 
       <!-- Location-based red objects -->
-      <a-entity gps-entity-place="latitude: 42.206120; longitude: 21.664141;">
+      <a-entity id="redObjects" gps-entity-place="latitude: 42.206120; longitude: 21.664141;">
         <a-sphere position="0 1 0" color="red" radius="0.5"></a-sphere>
         <a-box
           position="-1 0.5 0"
@@ -48,7 +32,86 @@
       </a-entity>
 
       <!-- Marker-based camera -->
-      <a-marker-camera preset="hiro"></a-marker-camera>
+      <a-marker-camera preset="hiro">
+        <!-- Add an event listener for the "markerFound" event -->
+        <a-entity
+          id="cameraRig"
+          position="0 0 0"
+          camera
+          look-controls
+          wasd-controls
+          mouse-cursor
+          touch-controls
+          kinematic-body
+          raycaster="objects: .clickable"
+          gps-camera="minDistance: 0"
+          cursor="fuse: true; fuseTimeout: 500"
+          raycaster-enabled="true"
+          gps-entity-place="latitude: 42.206120; longitude: 21.664141;"
+        ></a-entity>
+
+        <a-entity id="redObjects" gps-entity-place="latitude: 42.206120; longitude: 21.664141;">
+          <a-sphere
+            position="0 1 0"
+            color="red"
+            radius="0.5"
+            visible="false" <!-- Set initial visibility to false -->
+          ></a-sphere>
+          <a-box
+            position="-1 0.5 0"
+            color="red"
+            width="0.5"
+            height="0.5"
+            depth="0.5"
+            visible="false" <!-- Set initial visibility to false -->
+          ></a-box>
+          <a-cylinder
+            position="1 0.5 0"
+            color="red"
+            radius="0.25"
+            height="0.5"
+            visible="false" <!-- Set initial visibility to false -->
+          ></a-cylinder>
+        </a-entity>
+
+        <!-- Add an event listener for the "markerLost" event -->
+        <a-entity
+          id="redObjects"
+          gps-entity-place="latitude: 42.206120; longitude: 21.664141;"
+          visible="false" <!-- Set initial visibility to false -->
+        >
+          <!-- ... (your red objects) ... -->
+        </a-entity>
+        <a-box
+          position="-1 0.5 0"
+          color="red"
+          width="0.5"
+          height="0.5"
+          depth="0.5"
+          visible="false" <!-- Set initial visibility to false -->
+        ></a-box>
+        <a-cylinder
+          position="1 0.5 0"
+          color="red"
+          radius="0.25"
+          height="0.5"
+          visible="false" <!-- Set initial visibility to false -->
+        ></a-cylinder>
+      </a-marker-camera>
+
+      <script>
+        // Event listener for the "markerFound" event
+        document.querySelector('a-marker').addEventListener('markerFound', function () {
+          // Set visibility to true when marker is found
+          document.getElementById('redObjects').setAttribute('visible', true);
+        });
+
+        // Event listener for the "markerLost" event
+        document.querySelector('a-marker').addEventListener('markerLost', function () {
+          // Set visibility to false when marker is lost
+          document.getElementById('redObjects').setAttribute('visible', false);
+        });
+      </script>
     </a-scene>
   </body>
 </html>
