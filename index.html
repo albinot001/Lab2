@@ -7,72 +7,25 @@
   <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
   <!-- include ar.js for A-Frame -->
   <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/2.3.1/aframe/build/aframe-ar.js"></script>
-  <title>AR Lab</title>
+  <title>Lab2</title>
 </head>
 <body style="margin: 0px; overflow: hidden">
   <a-scene embedded arjs>
-    <!-- Marker-based blue objects -->
     <a-marker preset="hiro">
-      <a-sphere id="blueSphere" position="0 1 0" color="blue" radius="0.5"></a-sphere>
-      <a-box id="blueBox" position="-1 0.5 0" color="blue" width="0.5" height="0.5" depth="0.5"></a-box>
-      <a-cylinder id="blueCylinder" position="1 0.5 0" color="blue" radius="0.25" height="0.5"></a-cylinder>
+      <a-circle position="0 1 0" color="blue" radius="0.5"></a-circle>
+      <a-sphere position="-1 0.5 0" color="blue" radius="0.5"></a-sphere>
+      <a-cube position="1 0.5 0" color="blue" scale="0.5 0.5 0.5"></a-cube>
     </a-marker>
-
-    <!-- Red objects (initially invisible) -->
-    <a-sphere id="redSphere" color="red" visible="false"></a-sphere>
-    <a-box id="redBox" color="red" visible="false"></a-box>
-    <a-cylinder id="redCylinder" color="red" visible="false"></a-cylinder>
-
-    <!-- Custom component to handle visibility based on camera distance -->
-    <a-entity id="cameraDistanceListener" distance-listener></a-entity>
-
-    <!-- Marker-based camera -->
     <a-marker-camera preset="hiro"></a-marker-camera>
   </a-scene>
-
   <script>
-    // Custom component to calculate and update visibility based on distance
-    AFRAME.registerComponent('distance-listener', {
-      init: function () {
-        this.marker = document.querySelector('a-marker');
-        this.camera = document.querySelector('a-marker-camera');
-        this.blueObjects = document.querySelectorAll('#blueSphere, #blueBox, #blueCylinder');
-        this.redObjects = document.querySelectorAll('#redSphere, #redBox, #redCylinder');
-        this.updateVisibility();
-      },
-      updateVisibility: function () {
-        var markerPosition = new THREE.Vector3();
-        var cameraPosition = new THREE.Vector3();
-        this.marker.object3D.getWorldPosition(markerPosition);
-        this.camera.object3D.getWorldPosition(cameraPosition);
-        
-        var distance = markerPosition.distanceTo(cameraPosition);
-
-        // Adjust this threshold value based on your preference
-        var visibilityThreshold = 2; // Units in meters
-
-        // Update visibility based on distance
-        if (distance < visibilityThreshold) {
-          this.blueObjects.forEach(function (obj) {
-            obj.setAttribute('visible', true);
-          });
-          this.redObjects.forEach(function (obj) {
-            obj.setAttribute('visible', false);
-          });
-        } else {
-          this.blueObjects.forEach(function (obj) {
-            obj.setAttribute('visible', false);
-          });
-          this.redObjects.forEach(function (obj) {
-            obj.setAttribute('visible', true);
-          });
-        }
-
-        // Call the updateVisibility function on every frame
-        this.el.sceneEl.renderer.setAnimationLoop(() => {
-          this.updateVisibility();
-        });
-      }
+    navigator.geolocation.getCurrentPosition(function (position) {
+      var redLocationObjects = document.querySelector("[preset='hiro']");
+      redLocationObjects.innerHTML = `
+        <a-sphere position="${position.coords.longitude} 0.5 ${position.coords.latitude}" color="red"></a-sphere>
+        <a-box position="${position.coords.longitude + 0.01} 0.5 ${position.coords.latitude}" color="red"></a-box>
+        <a-cylinder position="${position.coords.longitude - 0.01} 0.5 ${position.coords.latitude}" color="red"></a-cylinder>
+      `;
     });
   </script>
 </body>
